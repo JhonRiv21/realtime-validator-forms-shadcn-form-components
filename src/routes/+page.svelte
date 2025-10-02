@@ -13,7 +13,6 @@
 
 	let loading = $state(false);
 
-	
 	const experienceOptions = [
 		{ value: 'beginner', label: 'Principiante (0-2 años)' },
 		{ value: 'intermediate', label: 'Intermedio (3-5 años)' },
@@ -53,7 +52,6 @@
 	});
 
 	const { form: formData, enhance } = form;
-	
 </script>
 
 <div
@@ -119,10 +117,10 @@
 					{#snippet children({ props })}
 						<Form.Label>Nivel de Experiencia</Form.Label>
 						<RadioGroup bind:value={$formData.experience} {...props}>
-							{#each experienceOptions as option}
+							{#each experienceOptions as option (option.value)}
 								<div class="flex items-center space-x-2">
 									<RadioGroupItem value={option.value} id={option.value} />
-									<label for={option.value} class="text-sm font-normal cursor-pointer">
+									<label for={option.value} class="cursor-pointer text-sm font-normal">
 										{option.label}
 									</label>
 								</div>
@@ -185,7 +183,7 @@
 					{#snippet children({ props })}
 						<div class="flex items-center space-x-2">
 							<Checkbox {...props} bind:checked={$formData.terms} id="terms" />
-							<label for="terms" class="text-sm font-normal cursor-pointer">
+							<label for="terms" class="cursor-pointer text-sm font-normal">
 								Acepto los términos y condiciones
 							</label>
 						</div>

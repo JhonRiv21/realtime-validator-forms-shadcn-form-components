@@ -59,6 +59,7 @@
 		data-slot="button"
 		class={cn(buttonVariants({ variant, size }), className)}
 		href={disabled ? undefined : href}
+		rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
 		aria-disabled={disabled}
 		role={disabled ? 'link' : undefined}
 		tabindex={disabled ? -1 : undefined}
