@@ -26,6 +26,8 @@
 		onValueChange?: (value: string) => void;
 		class?: string;
 		'aria-invalid'?: boolean | string;
+		displayLimit?: number; // Límite de opciones a mostrar por defecto
+		searchPlaceholder?: string;
 	}
 
 	let {
@@ -36,6 +38,8 @@
 		onValueChange,
 		class: className,
 		'aria-invalid': ariaInvalid = false,
+		displayLimit = 100,
+		searchPlaceholder = 'Buscar...',
 		...restProps
 	}: Props = $props();
 
@@ -51,6 +55,7 @@
 
 	let open = $state(false);
 	let mounted = $state(false);
+	let searchTerm = $state('');
 
 	onMount(() => {
 		mounted = true;
@@ -58,16 +63,36 @@
 
 	const selectedOption = $derived(options.find((option) => option.value === value));
 
+	// Filtrar opciones basado en el término de búsqueda
+	const filteredOptions = $derived(
+		!searchTerm.trim()
+			? options.slice(0, displayLimit) // Sin búsqueda: mostrar solo las primeras opciones hasta el límite
+			: options.filter((option) => // Con búsqueda: filtrar en todas las opciones
+				option.label.toLowerCase().includes(searchTerm.toLowerCase())
+			)
+	);
+
+	// Contador de opciones mostradas vs total
+	const displayInfo = $derived(
+		searchTerm.trim()
+			? `Mostrando ${filteredOptions.length} de ${options.length} opciones`
+			: `Mostrando ${filteredOptions.length} de ${options.length} opciones. Escribe para buscar en todas las opciones.`
+	);
+
 	function handleSelect(optionValue: string) {
 		if (disabled) return;
 		value = optionValue;
 		open = false;
+		searchTerm = ''; // Limpiar búsqueda al seleccionar
 		onValueChange?.(optionValue);
 	}
 
 	function handleOpenChange(newOpen: boolean) {
 		if (disabled) return;
 		open = newOpen;
+		if (!newOpen) {
+			searchTerm = ''; // Limpiar búsqueda al cerrar
+		}
 	}
 </script>
 
@@ -101,14 +126,21 @@
 					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent class="!w-auto p-0">
-				<Command>
-					<CommandInput placeholder="Buscar..." />
+			<PopoverContent class="p-0" style="min-width: 100%; width: max-content; max-width: 100%;">
+				<Command shouldFilter={false}>
+					<CommandInput 
+						placeholder={searchPlaceholder} 
+						bind:value={searchTerm}
+					/>
 					<CommandList>
 						<CommandEmpty>No se encontraron opciones.</CommandEmpty>
-						<CommandGroup>
-							{#each options as option (option.value)}
-								<CommandItem value={option.label} onSelect={() => handleSelect(option.value)}>
+						<CommandGroup class="!max-h-[200px] overflow-y-auto">
+							{#each filteredOptions as option (option.value)}
+								<CommandItem 
+									value={option.label} 
+									onSelect={() => handleSelect(option.value)}
+									class="cursor-pointer"
+								>
 									<Check
 										class={cn('mr-2 h-4 w-4', value === option.value ? 'opacity-100' : 'opacity-0')}
 									/>
@@ -116,6 +148,11 @@
 								</CommandItem>
 							{/each}
 						</CommandGroup>
+						{#if options.length > 0}
+							<div class="px-3 py-1.5 text-xs text-muted-foreground border-t">
+								{displayInfo}
+							</div>
+						{/if}
 					</CommandList>
 				</Command>
 			</PopoverContent>

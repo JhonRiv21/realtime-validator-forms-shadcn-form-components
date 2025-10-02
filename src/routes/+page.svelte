@@ -103,6 +103,8 @@
 							{options}
 							bind:value={$formData.country}
 							placeholder="Selecciona tu país"
+							searchPlaceholder="Buscar país..."
+							displayLimit={100}
 							{...props}
 						/>
 					{/snippet}
