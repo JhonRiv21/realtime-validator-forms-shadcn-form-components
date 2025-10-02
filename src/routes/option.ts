@@ -26,7 +26,7 @@ export const options = [
     { value: 'rio_de_janeiro', label: 'Río de Janeiro' },
     { value: 'santiago_cl', label: 'Santiago de Chile' },
     { value: 'bogota', label: 'Bogotá' },
-    { value: 'lima_pe', label: 'Lima' }, // Clave corregida
+    { value: 'lima_pe', label: 'Lima' },
     { value: 'caracas', label: 'Caracas' },
     { value: 'montreal', label: 'Montreal' },
     { value: 'milan', label: 'Milán' },
@@ -484,7 +484,7 @@ export const options = [
     { value: 'krakow_pl', label: 'Cracovia' },
     { value: 'kyoto_jp', label: 'Kioto' },
     { value: 'leeds_uk', label: 'Leeds' },
-    { value: 'lima_pe2', label: 'Lima (Perú)' }, // Clave única extra para Perú
+    { value: 'lima_pe2', label: 'Lima (Perú)' },
     { value: 'linz_at', label: 'Linz' },
     { value: 'lisbon_pt', label: 'Lisboa' },
     { value: 'liverpool_uk', label: 'Liverpool' },

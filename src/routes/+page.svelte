@@ -74,6 +74,7 @@
 							{...props}
 							bind:value={$formData.username}
 							placeholder="Ingresa tu nombre de usuario"
+							autocomplete="username"
 						/>
 					{/snippet}
 				</Form.Control>
@@ -89,6 +90,7 @@
 							bind:value={$formData.email}
 							type="email"
 							placeholder="tu@email.com"
+							autocomplete="email"
 						/>
 					{/snippet}
 				</Form.Control>
@@ -171,6 +173,7 @@
 							type="password"
 							bind:value={$formData.confirmPassword}
 							placeholder="Confirma tu contraseña"
+							autocomplete="new-password"
 						/>
 					{/snippet}
 				</Form.Control>

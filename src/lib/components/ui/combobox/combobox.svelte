@@ -26,7 +26,7 @@
 		onValueChange?: (value: string) => void;
 		class?: string;
 		'aria-invalid'?: boolean | string;
-		displayLimit?: number; // Límite de opciones a mostrar por defecto
+		displayLimit?: number;
 		searchPlaceholder?: string;
 	}
 
@@ -43,8 +43,6 @@
 		...restProps
 	}: Props = $props();
 
-	// Extraer name/id para usarlos en un input oculto y evitar que vayan al botón
-	// Mantener el resto de props (incluyendo aria-*) para el botón/trigger
 	const { name: fieldName, id: fieldId, ...buttonProps } = restProps as unknown as {
 		name?: string;
 		id?: string;
@@ -63,16 +61,14 @@
 
 	const selectedOption = $derived(options.find((option) => option.value === value));
 
-	// Filtrar opciones basado en el término de búsqueda
 	const filteredOptions = $derived(
 		!searchTerm.trim()
-			? options.slice(0, displayLimit) // Sin búsqueda: mostrar solo las primeras opciones hasta el límite
-			: options.filter((option) => // Con búsqueda: filtrar en todas las opciones
+			? options.slice(0, displayLimit)
+			: options.filter((option) =>
 				option.label.toLowerCase().includes(searchTerm.toLowerCase())
 			)
 	);
 
-	// Contador de opciones mostradas vs total
 	const displayInfo = $derived(
 		searchTerm.trim()
 			? `Mostrando ${filteredOptions.length} de ${options.length} opciones`
@@ -83,7 +79,7 @@
 		if (disabled) return;
 		value = optionValue;
 		open = false;
-		searchTerm = ''; // Limpiar búsqueda al seleccionar
+		searchTerm = '';
 		onValueChange?.(optionValue);
 	}
 
@@ -91,7 +87,7 @@
 		if (disabled) return;
 		open = newOpen;
 		if (!newOpen) {
-			searchTerm = ''; // Limpiar búsqueda al cerrar
+			searchTerm = '';
 		}
 	}
 </script>
@@ -99,7 +95,6 @@
 {#if mounted}
 	<div class="w-full">
 		<Popover bind:open onOpenChange={handleOpenChange}>
-			<!-- Asegurar que el valor se envíe con el formulario -->
 			<input type="hidden" name={fieldName} value={value} />
 			<PopoverTrigger class="w-full">
 				<Button
@@ -126,7 +121,7 @@
 					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent class="p-0" style="min-width: 100%; width: max-content; max-width: 100%;">
+			<PopoverContent class="p-0">
 				<Command shouldFilter={false}>
 					<CommandInput 
 						placeholder={searchPlaceholder} 
@@ -172,7 +167,7 @@
 			{disabled}
 			{...buttonProps}
 		>
-			<span class="min-w-0 flex-1 truncate font-normal text-[#555555]/80"> Cargando... </span>
+			<span class="min-w-0 flex-1 truncate font-normal text-[#555555]/80">Cargando...</span>
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 		</Button>
 	</div>
