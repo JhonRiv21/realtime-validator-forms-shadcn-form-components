@@ -94,7 +94,7 @@
 	<div class="w-full">
 		<Popover bind:open onOpenChange={handleOpenChange}>
 			<input type="hidden" name={fieldName} {value} autocomplete="off" />
-			<PopoverTrigger class="w-full">
+			<PopoverTrigger class="w-full" {disabled}>
 				<Button
 					variant="outline"
 					role="combobox"
